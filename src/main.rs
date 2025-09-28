@@ -46,6 +46,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."#,
             env!("CARGO_PKG_VERSION")
         ))
         .version(env!("CARGO_PKG_VERSION"))
+        .disable_help_subcommand(true)
         .subcommand_required(true)
         .arg_required_else_help(true);
 
