@@ -18,4 +18,5 @@
 mod package;
 
 pub use package::Package;
+pub use package::PackageRoot;
 pub use package::PackageMap;

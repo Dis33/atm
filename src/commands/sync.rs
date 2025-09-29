@@ -18,8 +18,6 @@
 use crate::commands::CommandDef;
 use crate::types::{Package, PackageMap};
 use clap::{Arg, ArgAction, ArgMatches, Command};
-use std::error::Error;
-use std::fs;
 use tracing::{error, info};
 use url::Url;
 
@@ -101,26 +99,20 @@ impl CommandDef for SyncCommand {
             }
         };
 
-        let dir_dtor = || {
-            info!("Cleaning build environment...");
-            if let Err(e) = fs::remove_dir_all(dir) {
-                error!("Error cleaning build environment: {}", e)
-            }
-        };
-
         let backend = match pkg.config().backend().to_backend() {
             Ok(backend) => backend,
             Err(e) => {
                 error!("Error initializing of backend: {}", e);
-                dir_dtor();
                 return;
             }
         };
 
-        backend.install(&pkg);
+        if let Err(e) = backend.install(&pkg, dir) {
+            error!("{}", e);
+            return;
+        }
 
         map.add(pkg);
         info!("Package installed");
-        dir_dtor();
     }
 }

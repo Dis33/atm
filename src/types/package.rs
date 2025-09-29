@@ -142,8 +142,30 @@ fn latest_commit(url: &Url) -> Result<String, Error> {
     Ok(oid.unwrap().to_string())
 }
 
+pub struct PackageRoot {
+    dir: PathBuf,
+}
+
+impl PackageRoot {
+    fn new(dir: PathBuf) -> Self {
+        Self { dir }
+    }
+
+    pub fn dir(&self) -> &PathBuf {
+        &self.dir
+    }
+}
+
+impl Drop for PackageRoot {
+    fn drop(&mut self) {
+        if let Err(e) = fs::remove_dir_all(&self.dir) {
+            warn!("{}", e)
+        }
+    }
+}
+
 impl Package {
-    pub fn fetch(name: String, url: Url) -> Result<(Self, PathBuf), Error> {
+    pub fn fetch(name: String, url: Url) -> Result<(Self, PackageRoot), Error> {
         let commit = latest_commit(&url)?;
 
         let mut s = Self {
@@ -171,7 +193,7 @@ impl Package {
 
         s.config = config;
 
-        Ok((s, dir))
+        Ok((s, PackageRoot::new(dir)))
     }
 
     pub fn latest_commit(&self) -> Result<String, Error> {

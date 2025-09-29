@@ -19,12 +19,12 @@ mod docker;
 
 use std::error::Error;
 use crate::backends::docker::DockerBackend;
-use crate::types::Package;
+use crate::types::{Package, PackageRoot};
 pub use docker::DockerConfig;
 use serde::{Deserialize, Serialize};
 
 pub trait Backend: Send + Sync {
-    fn install(&self, package: &Package) -> Result<(), Box<dyn Error>>;
+    fn install(&self, package: &Package, root: PackageRoot) -> Result<(), Box<dyn Error>>;
     fn uninstall(&self, package: &Package) -> Result<(), Box<dyn Error>>;
 }
 
@@ -45,7 +45,7 @@ impl Default for BackendConfig {
 struct DummyBackend;
 
 impl Backend for DummyBackend {
-    fn install(&self, _package: &Package) -> Result<(), Box<dyn Error>> { Ok(()) }
+    fn install(&self, _package: &Package, _root: PackageRoot) -> Result<(), Box<dyn Error>> { Ok(()) }
     fn uninstall(&self, _package: &Package) -> Result<(), Box<dyn Error>> { Ok(()) }
 }
 

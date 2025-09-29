@@ -16,7 +16,7 @@
  */
 
 use crate::backends::Backend;
-use crate::types::Package;
+use crate::types::{Package, PackageRoot};
 use bollard::Docker;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -72,11 +72,13 @@ impl DockerBackend {
 }
 
 impl Backend for DockerBackend {
-    fn install(&self, package: &Package) -> Result<(), Box<dyn std::error::Error>> {
-        todo!()
+    fn install(&self, package: &Package, root: PackageRoot) -> Result<(), Box<dyn std::error::Error>> {
+        //todo!()
+        Ok(())
     }
 
     fn uninstall(&self, package: &Package) -> Result<(), Box<dyn std::error::Error>> {
-        todo!()
+        //todo!()
+        Ok(())
     }
 }

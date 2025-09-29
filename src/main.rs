@@ -24,14 +24,18 @@ mod types;
 use crate::commands::{CommandDef, SyncCommand};
 use clap::Command;
 use constcat::concat;
+use tracing_indicatif::IndicatifLayer;
 use tracing_subscriber::prelude::*;
 
 const ATM_RESOURCE_DIR: &str = ".";
 const ATM_PACKAGES_FILE: &str = concat!(ATM_RESOURCE_DIR, "/packages.toml");
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let indicatif_layer = IndicatifLayer::new();
+
     tracing_subscriber::registry()
-        .with(tracing_subscriber::fmt::layer())
+        .with(tracing_subscriber::fmt::layer().with_writer(indicatif_layer.get_stderr_writer()))
+        .with(indicatif_layer)
         .init();
 
     let subcommands: Vec<Box<dyn CommandDef>> = vec![Box::new(SyncCommand::new())];
