@@ -1,7 +1,11 @@
 [package]
 name = "atm"
-version = "0.1.0"
+version = "2025.39.16"
 edition = "2024"
+
+[build-dependencies]
+regex = "1.11"
+nextver = "0.8"
 
 [dependencies]
 bollard = "0.19"
@@ -17,7 +21,7 @@ tracing = "0.1"
 tracing-indicatif = "0.3"
 tracing-subscriber = "0.3"
 url = "2.5"
-uuid = { version = "1.18.1", features = ["v7", "rng"] }
+uuid = { version = "1.18", features = ["v7", "rng"] }
 
 [profile.release]
 opt-level = 3
