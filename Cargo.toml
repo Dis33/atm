@@ -1,11 +1,6 @@
 [package]
 name = "atm"
-version = "2025.39.16"
 edition = "2024"
-
-[build-dependencies]
-regex = "1.11"
-nextver = "0.8"
 
 [dependencies]
 bollard = "0.19"
