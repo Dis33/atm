@@ -15,13 +15,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-use std::error::Error;
-use std::fs;
-use clap::{Arg, ArgAction, ArgMatches, Command};
-use tracing::{error, info};
-use url::Url;
 use crate::commands::CommandDef;
 use crate::types::{Package, PackageMap};
+use clap::{Arg, ArgAction, ArgMatches, Command};
+use std::error::Error;
+use std::fs;
+use tracing::{error, info};
+use url::Url;
 
 pub struct SyncCommand;
 
@@ -33,27 +33,38 @@ impl SyncCommand {
 
 impl CommandDef for SyncCommand {
     fn name(&self) -> &'static str {
-        "-S"
+        "sync"
     }
 
     fn command(&self) -> Command {
         Command::new(self.name())
-            .long_flag("sync")
+            .short_flag('S')
+            .about("Synchronize package from repository")
             .arg(
                 Arg::new("name")
                     .long("name")
                     .short('n')
                     .help("Name of package (default value is repository name)")
+                    .num_args(1)
                     .action(ArgAction::Set),
             )
-            .arg(Arg::new("url").required(true))
+            .arg(
+                Arg::new("refresh")
+                    .long("refresh")
+                    .short('y')
+                    .help(
+                        "If package is already synchronized, Update it; Otherwise, option is ignored",
+                    )
+                    .action(ArgAction::Set),
+            )
+            .arg(Arg::new("url").help("URL of package to synchronize").required(true))
     }
 
     fn run(&self, sub_matches: &ArgMatches) {
         let url = sub_matches.get_one::<String>("url").unwrap();
         let Ok(url) = Url::parse(url) else {
             error!("Unable to parse URL");
-            return
+            return;
         };
 
         let default_name = url
@@ -67,26 +78,26 @@ impl CommandDef for SyncCommand {
             .or(default_name)
         else {
             error!("Couldn't get name from given URL");
-            return
+            return;
         };
 
         let mut map = match PackageMap::from_global() {
             Ok(map) => map,
             Err(e) => {
                 error!("unable to get global: {}", e);
-                return
+                return;
             }
         };
         if map.contains(&name) {
             error!("Package already installed");
-            return
+            return;
         }
 
         let (pkg, dir) = match Package::fetch(name, url) {
             Ok(t) => t,
             Err(e) => {
                 error!("unable to fetch package: {}", e);
-                return
+                return;
             }
         };
 
@@ -102,7 +113,7 @@ impl CommandDef for SyncCommand {
             Err(e) => {
                 error!("Error initializing of backend: {}", e);
                 dir_dtor();
-                return
+                return;
             }
         };
 
