@@ -20,15 +20,12 @@
 mod backends;
 mod commands;
 mod types;
+mod config;
 
 use crate::commands::{CommandDef, SyncCommand};
 use clap::Command;
-use constcat::concat;
 use tracing_indicatif::IndicatifLayer;
 use tracing_subscriber::prelude::*;
-
-const ATM_RESOURCE_DIR: &str = ".";
-const ATM_PACKAGES_FILE: &str = concat!(ATM_RESOURCE_DIR, "/packages.toml");
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let indicatif_layer = IndicatifLayer::new();

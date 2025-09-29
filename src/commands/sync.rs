@@ -46,15 +46,6 @@ impl CommandDef for SyncCommand {
                     .num_args(1)
                     .action(ArgAction::Set),
             )
-            .arg(
-                Arg::new("refresh")
-                    .long("refresh")
-                    .short('y')
-                    .help(
-                        "If package is already synchronized, Update it; Otherwise, option is ignored",
-                    )
-                    .action(ArgAction::Set),
-            )
             .arg(Arg::new("url").help("URL of package to synchronize").required(true))
     }
 

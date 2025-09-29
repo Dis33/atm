@@ -8,17 +8,10 @@ fully written in Rust.
 
 ### Commands
 
-- `sync`, `-S`  : Synchronize package from repository
-  - **Options**:
-    - `-y` : If package is already installed, Update it; Otherwise, option is ignored
-
-
+- `sync`, `-S` : Synchronize package from repository
+- `update`, `-U` : Update packages
 - `remove`, `-R` : Remove packages
-
-
 - `query`, `-Q` : Query packages
-  - **Options**:
-    - `-i` : Display information of package
 
 ### Options
 

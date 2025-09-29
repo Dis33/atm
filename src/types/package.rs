@@ -16,7 +16,6 @@
  */
 
 use crate::backends::BackendConfig;
-use crate::ATM_PACKAGES_FILE;
 use git2::{Direction, Oid, Remote, Repository};
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
@@ -30,6 +29,7 @@ use thiserror::Error;
 use tracing::{error, info_span, warn};
 use url::Url;
 use uuid::Uuid;
+use crate::config;
 
 #[derive(Debug, Error)]
 pub enum Error {
@@ -262,7 +262,7 @@ impl PackageMap {
     }
 
     pub fn from_global() -> Result<Self, Error> {
-        let path = PathBuf::from(ATM_PACKAGES_FILE);
+        let path = PathBuf::from(config::packages_file());
         Self::from_file(&path)
     }
 
