@@ -176,7 +176,6 @@ impl Repository {
                 return Err(InvalidRemote);
             };
 
-            // TODO : retrieving resources from external source - make it asynchronous
             let mut remote = repo.find_remote(remote)?;
             remote.connect(git2::Direction::Fetch)?;
 
