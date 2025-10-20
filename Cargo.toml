@@ -3,10 +3,14 @@ name = "atm"
 edition = "2024"
 
 [dependencies]
+async-trait = "0.1.89"
 git2 = { version = "0.20", features = ["https", "ssh"] }
 kairoi = "0.2.3"
+serde = { version = "1.0.227", features = ["derive"] }
+thiserror = "2.0.17"
 tokio = { version = "1.47.1", features = ["full"] }
-async-trait = "0.1.89"
+toml = "0.9.8"
+url = "2.5.7"
 
 [profile.release]
 opt-level = 3
