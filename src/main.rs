@@ -15,6 +15,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 mod commands;
+mod package;
+mod repository;
 
 use crate::commands::commands;
 use kairoi::{error, AddConsoleHandler, GlobalHandler};
