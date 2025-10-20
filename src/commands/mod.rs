@@ -14,10 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-use crate::commands::install::Install;
 use async_trait::async_trait;
-
-mod install;
 
 #[async_trait]
 pub trait Command: Sync + Send {
@@ -25,7 +22,7 @@ pub trait Command: Sync + Send {
     async fn run(&self, args: &[String]);
 }
 
-static COMMANDS: [&dyn Command; 1] = [&Install::new()];
+static COMMANDS: [&dyn Command; 0] = [];
 
 pub const fn commands() -> &'static [&'static dyn Command] {
     &COMMANDS
