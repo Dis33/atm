@@ -1,9 +1,7 @@
 use actix_web::{post, App, HttpResponse, HttpServer, Responder};
 use bollard::exec::StartExecResults;
 use bollard::models::{ContainerCreateBody, ExecConfig};
-use bollard::query_parameters::{
-    CreateContainerOptions, CreateImageOptions, StartContainerOptions,
-};
+use bollard::query_parameters::{CreateContainerOptions, CreateImageOptions, RemoveContainerOptions, StartContainerOptions, StopContainerOptions};
 use bollard::Docker;
 use futures_util::stream::StreamExt;
 use std::env::args;
@@ -60,7 +58,7 @@ async fn sh(body: String) -> impl Responder {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let docker = Docker::connect_with_defaults()?;
 
-    let [ref image, ref tag, ref port] = args().collect::<Vec<String>>()[..3] else {
+    let [.., ref image, ref tag, ref port] = args().collect::<Vec<String>>()[..4] else {
         eprintln!("insufficient arguments");
         return Ok(());
     };
@@ -114,6 +112,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .bind(("127.0.0.1", port))?
         .run()
         .await?;
+
+    let docker = DOCKER.get().unwrap();
+    let container = CONTAINER.get().unwrap();
+
+    if let Err(e) = docker.stop_container(container, None::<StopContainerOptions>).await {
+        eprintln!("Failed to stop container: {}", e);
+    }
+
+    if let Err(e) = docker.remove_container(container, None::<RemoveContainerOptions>).await {
+        eprintln!("Failed to remove container: {}", e);
+    }
+    
+    eprintln!("Container {} removed.", container);
 
     Ok(())
 }
