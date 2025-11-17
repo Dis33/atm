@@ -22,3 +22,25 @@ sandbox alpine latest 8080
     - 200 : Execution successfully completed
     - 201 : Execution is started, but detached
     - 500 : Internal error
+
+## Example
+
+Container opened with:
+
+```sh
+sandbox alpine latest 8080
+```
+
+HTTP request:
+
+```http request
+POST http://127.0.0.1:8080/sh
+
+uname
+```
+
+Expected response:
+
+```
+Linux
+```
